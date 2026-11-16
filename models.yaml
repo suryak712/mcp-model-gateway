@@ -1,0 +1,31 @@
+# The model registry. Every model the gateway may serve is listed here with an owner,
+# a licence and where its weights came from. Set enabled: false to switch a model off
+# immediately (the kill switch); the gateway refuses it on the very next call.
+#
+# `name` is what the inference backend (Ollama / vLLM) calls the model. Pull models
+# with `ollama pull <name>` before you enable them.
+
+models:
+  qwen-small:
+    name: "qwen2.5:1.5b"
+    owner: "surya"
+    license: "Apache-2.0"
+    source: "Ollama library (Qwen2.5 1.5B Instruct)"
+    enabled: true
+    max_output_tokens: 512
+
+  llama-small:
+    name: "llama3.2:3b"
+    owner: "surya"
+    license: "Llama 3.2 Community License"
+    source: "Ollama library (Llama 3.2 3B Instruct)"
+    enabled: true
+    max_output_tokens: 512
+
+  gemma-small:
+    name: "gemma2:2b"
+    owner: "surya"
+    license: "Gemma Terms of Use"
+    source: "Ollama library (Gemma 2 2B Instruct)"
+    enabled: false   # switched off: example of the kill switch
+    max_output_tokens: 512
