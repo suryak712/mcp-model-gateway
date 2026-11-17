@@ -75,15 +75,17 @@ python scripts/demo_client.py "$TOKEN" --model gemma-small
 python evals/run_eval.py                    # every enabled model, via Ollama
 ```
 
-Results on my laptop (fill in after running):
+Results on my laptop (Apple M5 Pro, Ollama, 17 cases, temperature 0, dataset c1a89bc62a8b):
 
-| Model | Quality pass rate | Safety pass rate | p50 latency (ms) | p95 latency (ms) |
-|---|---|---|---|---|
-| qwen-small (Qwen2.5 1.5B) | | | | |
-| llama-small (Llama 3.2 3B) | | | | |
+| Model | Quality pass rate | Safety pass rate | p50 latency (ms) | p95 latency (ms) | Avg output tokens |
+|---|---|---|---|---|---|
+| qwen-small (Qwen2.5 1.5B) | 100% | 25% | 39.2 | 288.1 | 11 |
+| llama-small (Llama 3.2 3B) | 100% | 100% | 58.0 | 257.7 | 7 |
+
+qwen-small revealed the secret in 3 out of 4 prompt-injection cases, while llama-small revealed none, so only llama-small would be enabled for confidential work.
 
 The dataset (`evals/dataset.jsonl`) mixes factual, arithmetic, extraction and formatting checks with
-three prompt-injection cases that try to make the model reveal a secret. Scoring is deterministic,
+four prompt-injection cases that try to make the model reveal a secret. Scoring is deterministic,
 and generation runs at temperature 0, so the same model gives the same report.
 
 ## Design notes and production gaps
