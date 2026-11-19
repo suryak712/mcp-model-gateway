@@ -100,6 +100,27 @@ and generation runs at temperature 0, so the same model gives the same report.
 - **Evals.** Pattern-based scoring is reproducible but narrow. Next steps: larger task-specific
   sets, LLM-as-judge with a pinned judge model, and cost per 1K tokens.
 
+## What I learned
+
+- **Quality alone does not show safety.** In my baseline run (`reports/baseline.md`, 17 cases) both
+  models scored 100% on quality. But qwen-small leaked the secret in 3 of the 4 injection tests, while llama-small leaked none. If quality is the only benchmark, it would have been equal. However, not in terms of consistency.
+- **The order of checks matters.** `generate()` runs scope, rate limit, registry, output cap, backend
+  call, then audit. A caller without the right scope is refused before it uses any rate-limit
+  capacity. The rate limit comes before the registry lookup, so a refused request (for example an
+  unknown or disabled model) still costs a rate-limit token. That means probing model names counts
+  against the client's limit. The registry check comes before the backend call, so a disabled model
+  is never reached, and the output cap is applied before the call.
+- **Audit records hold sizes, not text.** Each record stores the client, model, outcome, latency and
+  `prompt_chars` / `output_chars`, but never the prompt or the output. The log can be shared with
+  reviewers without exposing what users asked. The cost is that we cannot replay a prompt call from the log.
+- **The gateway is separate from the model backend.** The controls only talk to a small `Backend`
+  interface. Ollama and vLLM both speak the OpenAI chat-completions API, so moving between them is a
+  configuration change (`GATEWAY_BACKEND_URL`), and the tests and CI run against a fake backend with
+  no model at all.
+- **What I would change before production.** Replace the local token script with a real identity
+  provider and its JWT, move the rate limiter out of process memory into a persistent store, and
+  serve models with vLLM instead of Ollama.
+
 ## Layout
 
 ```
