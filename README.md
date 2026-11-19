@@ -103,7 +103,7 @@ and generation runs at temperature 0, so the same model gives the same report.
 ## What I learned
 
 - **Quality alone does not show safety.** In my baseline run (`reports/baseline.md`, 17 cases) both
-  models scored 100% on quality. But qwen-small leaked the secret in 3 of the 4 injection tests, while llama-small leaked none. If quality is the only benchmark, it would have been equal. However, not in terms of consistency.
+  models scored 100% on quality. But qwen-small leaked the secret in 3 of the 4 injection tests, while llama-small leaked none. If quality is the only benchmark, it would have been equal. However, not in terms of safety.
 - **The order of checks matters.** `generate()` runs scope, rate limit, registry, output cap, backend
   call, then audit. A caller without the right scope is refused before it uses any rate-limit
   capacity. The rate limit comes before the registry lookup, so a refused request (for example an
