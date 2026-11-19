@@ -118,7 +118,7 @@ and generation runs at temperature 0, so the same model gives the same report.
   configuration change (`GATEWAY_BACKEND_URL`), and the tests and CI run against a fake backend with
   no model at all.
 - **What I would change before production.** Replace the local token script with a real identity
-  provider and its JWT, move the rate limiter out of process memory into a persistent store, and
+  provider and its JWKS, move the rate limiter out of process memory into a persistent store, and
   serve models with vLLM instead of Ollama.
 
 ## Layout
